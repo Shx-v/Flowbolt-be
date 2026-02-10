@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: "auth-template"
+
+  r2dbc:
+    url: ${SPRING_R2DBC_URL:r2dbc:postgresql://shiv:NU9QHHqsM4FM8T0FzZmWaXpB7KWYD01f@dpg-d5muq8t6ubrc73ag7u30-a.singapore-postgres.render.com/monoflowbolt_qa6o?sslmode=require}
+    username: ${SPRING_R2DBC_USERNAME:shiv}
+    password: ${SPRING_R2DBC_PASSWORD:NU9QHHqsM4FM8T0FzZmWaXpB7KWYD01f}
+    pool:
+      enabled: true
+      initial-size: 2
+      max-size: 10
+
+  banner:
+    location: banner.txt
+
+  codec:
+    max-in-memory-size: 50MB
+
+  webflux:
+    base-path: /api/v1
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 20MB
+
+  compression:
+    enabled: false
+
+  http2:
+    enabled: false
+
+security:
+  jwt:
+    secret: ${JWT_SECRET:ABCDEFGHIJKLMNOQRSTUVWXYZ1234567890abcedfghijklmnoqrstuvwxyz}
+    expirationMs: ${JWT_EXPIRATION:3600000}
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    org.apache.kafka: OFF
+    org.quartz: OFF
+    org.apache.kafka:clients.NetworkClient: OFF
+    org.springframework.scheduling.quartz.LocalDataSourceJobStore: OFF
+
+server:
+  port: ${PORT:9090}
+

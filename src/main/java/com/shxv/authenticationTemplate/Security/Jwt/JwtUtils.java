@@ -1,7 +1,8 @@
 package com.shxv.authenticationTemplate.Security.Jwt;
 
 import com.shxv.authenticationTemplate.Auth.Model.User;
-import com.shxv.authenticationTemplate.Role.Service.GlobalPermissionService;
+import com.shxv.authenticationTemplate.Role.Model.Permission;
+import com.shxv.authenticationTemplate.Role.Service.PermissionService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -25,7 +26,7 @@ public class JwtUtils {
     private Key key;
 
     @Autowired
-    GlobalPermissionService permissionService;
+    PermissionService permissionService;
 
     @PostConstruct
     public void init() {

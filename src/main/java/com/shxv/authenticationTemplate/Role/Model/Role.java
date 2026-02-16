@@ -28,9 +28,6 @@ public class Role {
     @Column("description")
     private String description;
 
-    @Column("is_system")
-    private Boolean system;
-
     @CreatedDate
     @Column("created_at")
     private LocalDateTime createdAt;

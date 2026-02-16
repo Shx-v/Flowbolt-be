@@ -1,6 +1,5 @@
 package com.shxv.authenticationTemplate.Auth.Util;
 
-import com.shxv.authenticationTemplate.Auth.DTO.AdminCheckResponse;
 import com.shxv.authenticationTemplate.Security.Jwt.UserPrincipal;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
@@ -36,13 +35,6 @@ public class UserRoleUtil {
 
     public Mono<List<String>> getPermissions() {
         return getUserContext().map(UserPrincipal::getPermissions);
-    }
-
-    public Mono<AdminCheckResponse> isAdmin() {
-        return getUserContext().map(userPrincipal -> AdminCheckResponse.builder()
-                .isAdmin(userPrincipal.getPermissions().contains("ADMIN_ACCESS"))
-                .userId(userPrincipal.getUserId())
-                .build());
     }
 
     public Mono<Boolean> hasPermission(String perm) {

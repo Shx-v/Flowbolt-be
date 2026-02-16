@@ -14,5 +14,5 @@ public interface RoleService {
     Mono<List<RoleResponse>> getAllRole();
     Mono<RoleResponse> createRole(RoleRequest roleRequest);
     Mono<RoleResponse> updateRole(RoleRequest roleRequest, UUID id);
-    Mono<RoleResponse> deleteRole(UUID id);
+    Mono<Void> deleteRole(UUID id);
 }

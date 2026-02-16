@@ -6,7 +6,7 @@ import com.shxv.authenticationTemplate.Auth.DTO.UserResponse;
 import com.shxv.authenticationTemplate.Auth.Model.User;
 import com.shxv.authenticationTemplate.Auth.Repository.UserRepository;
 import com.shxv.authenticationTemplate.Auth.Util.UserRoleUtil;
-import com.shxv.authenticationTemplate.Role.Service.GlobalPermissionService;
+import com.shxv.authenticationTemplate.Role.Service.PermissionService;
 import com.shxv.authenticationTemplate.Role.Service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
     RoleService roleService;
 
     @Autowired
-    GlobalPermissionService globalPermissionService;
+    PermissionService permissionService;
 
     @Autowired
     UserRoleUtil userRoleUtil;
@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
 
         return Mono.zip(
                 roleService.getRoleById(user.getRole()),
-                globalPermissionService.getAllPermissions(user.getRole()).collectList()
+                permissionService.getAllPermissions(user.getRole()).collectList()
         ).map(tuple -> {
 
             var role = tuple.getT1();

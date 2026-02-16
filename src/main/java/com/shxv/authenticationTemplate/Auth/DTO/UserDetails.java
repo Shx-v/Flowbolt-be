@@ -2,7 +2,7 @@ package com.shxv.authenticationTemplate.Auth.DTO;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.shxv.authenticationTemplate.Role.DTO.RoleResponse;
-import com.shxv.authenticationTemplate.Role.Model.GlobalPermission;
+import com.shxv.authenticationTemplate.Role.Model.Permission;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +24,7 @@ public class UserDetails {
     private String firstName;
     private String lastName;
     private RoleResponse role;
-    private List<GlobalPermission> permissions;
+    private List<Permission> permissions;
     private String logoPath;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;

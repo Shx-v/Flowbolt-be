@@ -2,16 +2,12 @@ package com.shxv.authenticationTemplate.Role.Controller;
 
 import com.shxv.authenticationTemplate.Role.DTO.RoleRequest;
 import com.shxv.authenticationTemplate.Role.DTO.RoleResponse;
-import com.shxv.authenticationTemplate.Role.Model.GlobalPermission;
-import com.shxv.authenticationTemplate.Role.Service.GlobalPermissionService;
 import com.shxv.authenticationTemplate.Role.Service.RoleService;
 import com.shxv.authenticationTemplate.Util.ResponseEnvelope;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,16 +16,12 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 import java.util.UUID;
 
-@Tag(name = "Role", description = "Role Management APIs")
 @RestController
 @RequestMapping("/role")
 public class RoleController {
 
     @Autowired
     private RoleService roleService;
-
-    @Autowired
-    private GlobalPermissionService globalPermissionService;
 
     @Operation(summary = "Get a role by ID")
     @ApiResponses(value = {
@@ -95,52 +87,15 @@ public class RoleController {
                         .build());
     }
 
-
     @Operation(summary = "Delete a role by ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Role deleted successfully"),
             @ApiResponse(responseCode = "404", description = "Role not found")
     })
     @DeleteMapping("/{id}")
-    public Mono<ResponseEnvelope<RoleResponse>> deleteRole(@PathVariable UUID id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Mono<ResponseEnvelope<Void>> deleteRole(@PathVariable UUID id) {
         return roleService.deleteRole(id)
-                .map(roleResponse -> ResponseEnvelope.<RoleResponse>builder()
-                        .success(true)
-                        .status(200)
-                        .message("Role deleted successfully")
-                        .data(roleResponse)
-                        .build());
+                .then(Mono.fromSupplier(() -> new ResponseEnvelope<Void>(true, 200, "Role deleted successfully", null)));
     }
-
-    @Operation(
-            summary = "Get global permission list",
-            description = "Retrieves the list of all available global permissions"
-    )
-    @ApiResponses({
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Permission list retrieved successfully",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = GlobalPermission.class)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "500",
-                    description = "Internal server error"
-            )
-    })
-    @GetMapping("/permission")
-    public Mono<ResponseEnvelope<List<GlobalPermission>>> getPermissionList() {
-        return globalPermissionService.getPermissionList()
-                .collectList()
-                .map(perms -> ResponseEnvelope.<List<GlobalPermission>>builder()
-                        .success(true)
-                        .status(200)
-                        .message("Permission list retrieved successfully")
-                        .data(perms)
-                        .build()
-                );
-    }
-
 }

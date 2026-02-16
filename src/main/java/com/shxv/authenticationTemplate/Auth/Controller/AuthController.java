@@ -9,14 +9,11 @@ import com.shxv.authenticationTemplate.Util.ResponseEnvelope;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
-@Slf4j
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -24,7 +21,6 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
-    @Tag(name = "Authentication", description = "Authentication APIs")
     @PostMapping("/login")
     @Operation(summary = "Authenticate user and return JWT tokens")
     @ApiResponses(value = {
@@ -34,7 +30,6 @@ public class AuthController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     public Mono<ResponseEnvelope<LoginResponse>> login(@RequestHeader("Authorization") String authHeader) {
-        log.info("Authorization header received: {}", authHeader);
         return authService.login(authHeader)
                 .map(data -> new ResponseEnvelope<LoginResponse>()
                         .setSuccess(true)
@@ -56,7 +51,6 @@ public class AuthController {
                 });
     }
 
-    @Tag(name = "Authentication", description = "Authentication APIs")
     @PostMapping("/refresh")
     @Operation(summary = "Refresh JWT tokens using a valid refresh token")
     @ApiResponses(value = {
@@ -75,7 +69,6 @@ public class AuthController {
                         .setData(data));
     }
 
-    @Tag(name = "Authentication", description = "Authentication APIs")
     @PostMapping("/register")
     @Operation(summary = "Register a new user")
     @ApiResponses(value = {
@@ -92,7 +85,6 @@ public class AuthController {
                         .setData(user));
     }
 
-    @Tag(name = "Authentication", description = "Authentication APIs")
     @PostMapping("/logout")
     @Operation(summary = "Log out the user and invalidate the access token")
     @ApiResponses(value = {

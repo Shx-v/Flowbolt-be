@@ -3,13 +3,13 @@ spring:
     name: "auth-template"
 
   r2dbc:
-    url: ${SPRING_R2DBC_URL:r2dbc:postgresql://shiv:NU9QHHqsM4FM8T0FzZmWaXpB7KWYD01f@dpg-d5muq8t6ubrc73ag7u30-a.singapore-postgres.render.com/monoflowbolt_qa6o?sslmode=require}
+    url: ${SPRING_R2DBC_URL:r2dbc:postgresql://dpg-d4p7uom3jp1c73dud8k0-a.singapore-postgres.render.com:5432/monoflowbolt?sslmode=require}
     username: ${SPRING_R2DBC_USERNAME:shiv}
-    password: ${SPRING_R2DBC_PASSWORD:NU9QHHqsM4FM8T0FzZmWaXpB7KWYD01f}
+    password: ${SPRING_R2DBC_PASSWORD:ojnx4HZIkAy0WHHz9tHLUFxr2ifMVFSU}
     pool:
       enabled: true
-      initial-size: 2
-      max-size: 10
+      initial-size: 10
+      max-size: 50
 
   banner:
     location: banner.txt

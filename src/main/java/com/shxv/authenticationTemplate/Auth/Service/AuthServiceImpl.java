@@ -8,8 +8,9 @@ import com.shxv.authenticationTemplate.Auth.Model.Session;
 import com.shxv.authenticationTemplate.Auth.Model.User;
 import com.shxv.authenticationTemplate.Auth.Repository.SessionRepository;
 import com.shxv.authenticationTemplate.Auth.Repository.UserRepository;
-import com.shxv.authenticationTemplate.Role.Model.GlobalPermission;
-import com.shxv.authenticationTemplate.Role.Service.GlobalPermissionService;
+import com.shxv.authenticationTemplate.Role.Model.Permission;
+import com.shxv.authenticationTemplate.Role.Repository.PermissionRepository;
+import com.shxv.authenticationTemplate.Role.Service.PermissionService;
 import com.shxv.authenticationTemplate.Security.Jwt.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -23,6 +24,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.Comparator;
+import java.util.UUID;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -45,7 +47,7 @@ public class AuthServiceImpl implements AuthService {
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    GlobalPermissionService permissionService;
+    PermissionService permissionService;
 
     @Override
     public Mono<LoginResponse> login(String authHeader) {
@@ -91,7 +93,7 @@ public class AuthServiceImpl implements AuthService {
                                 return Mono.just(user);
                             })
                             .flatMap(u -> permissionService.getAllPermissions(u.getRole())
-                                    .map(GlobalPermission::getKey)
+                                    .map(Permission::getName)
                                     .collectList()
                                     .flatMap(perms -> Mono.zip(
                                                     jwtUtils.generateToken(u, perms),
@@ -110,7 +112,6 @@ public class AuthServiceImpl implements AuthService {
                                                         .setActive(true);
 
                                                 return sessionRepository.save(session)
-                                                        .doOnSuccess(System.out::println)
                                                         .map(saved -> new LoginResponse(accessToken, refreshToken));
                                             })));
                 });
@@ -143,7 +144,7 @@ public class AuthServiceImpl implements AuthService {
                         sessionRepository.findByRefreshTokenAndActiveIsTrue(body.getRefreshToken())
                                 .switchIfEmpty(Mono.error(new IllegalArgumentException("Session not found or expired")))
                                 .flatMap(existingSession -> permissionService.getAllPermissions(user.getRole())
-                                        .map(GlobalPermission::getKey)
+                                        .map(Permission::getName)
                                         .collectList()
                                         .flatMap(perms -> Mono.zip(
                                                 jwtUtils.generateToken(user, perms),

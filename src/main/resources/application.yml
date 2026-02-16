@@ -3,9 +3,9 @@ spring:
     name: "auth-template"
 
   r2dbc:
-    url: ${SPRING_R2DBC_URL:r2dbc:postgresql://shiv:fHebXigE5RVWEVE6p5mHS3UgqoODuz7j@dpg-d6602nbnv86c73e0uppg-a.singapore-postgres.render.com/fbmono?sslmode=require}
-    username: ${SPRING_R2DBC_USERNAME:shiv}
-    password: ${SPRING_R2DBC_PASSWORD:fHebXigE5RVWEVE6p5mHS3UgqoODuz7j}
+    url: ${SPRING_R2DBC_URL}
+    username: ${SPRING_R2DBC_USERNAME}
+    password: ${SPRING_R2DBC_PASSWORD}
     pool:
       enabled: true
       initial-size: 10
@@ -32,8 +32,8 @@ spring:
 
 security:
   jwt:
-    secret: ${JWT_SECRET:ABCDEFGHIJKLMNOQRSTUVWXYZ1234567890abcedfghijklmnoqrstuvwxyz}
-    expirationMs: ${JWT_EXPIRATION:3600000}
+    secret: ${JWT_SECRET}
+    expirationMs: ${JWT_EXPIRATION}
 
 logging:
   level:
@@ -45,5 +45,5 @@ logging:
     org.springframework.scheduling.quartz.LocalDataSourceJobStore: OFF
 
 server:
-  port: ${PORT:9090}
+  port: ${PORT}
 

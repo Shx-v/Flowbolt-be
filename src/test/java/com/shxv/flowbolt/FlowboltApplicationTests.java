@@ -1,10 +1,10 @@
-package com.shxv.authenticationTemplate;
+package com.shxv.flowbolt;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AuthenticationTemplateApplicationTests {
+class FlowboltApplicationTests {
 
 	@Test
 	void contextLoads() {

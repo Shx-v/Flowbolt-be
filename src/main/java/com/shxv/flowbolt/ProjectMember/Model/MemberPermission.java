@@ -24,7 +24,7 @@ public class MemberPermission {
     @Column("id")
     private UUID id;
 
-    @Column("project_user_member_id")
+    @Column("project_member_id")
     private UUID projectUserMemberId;
 
     @Column("permission_id")

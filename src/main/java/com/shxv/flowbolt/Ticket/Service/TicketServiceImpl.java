@@ -837,64 +837,69 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public Mono<Map<String, Long>> getTicketStatusDistribution() {
-        return userRoleUtil.isAdmin()
-                .flatMap(adminCheckResponse -> {
-                    if (adminCheckResponse.getIsAdmin()) {
-                        return ticketRepository.countGroupedByStatus()
-                                .collectMap(
-                                        LabelCountProjection::getLabel,
-                                        LabelCountProjection::getCount
-                                );
+        return ticketStatusRepository.findAll()
+                .collectMap(TicketStatus::getId, TicketStatus::getKey)
+                .flatMap(statusMap ->
+                        userRoleUtil.isAdmin()
+                                .flatMap(adminCheckResponse -> {
+                                    Flux<Ticket> flux = adminCheckResponse.getIsAdmin()
+                                            ? ticketRepository.findAll()
+                                            : ticketRepository.findByAssignedTo(adminCheckResponse.getUserId());
 
-                    }
-
-                    return ticketRepository.countByUserGroupedByStatus(adminCheckResponse.getUserId())
-                            .collectMap(
-                                    LabelCountProjection::getLabel,
-                                    LabelCountProjection::getCount
-                            );
-                });
+                                    return flux.collectList()
+                                            .map(tickets -> {
+                                                Map<String, Long> result = new HashMap<>();
+                                                tickets.forEach(t -> {
+                                                    String key = statusMap.getOrDefault(t.getStatus(), "UNKNOWN");
+                                                    result.put(key, result.getOrDefault(key, 0L) + 1);
+                                                });
+                                                return result;
+                                            });
+                                })
+                );
     }
 
     @Override
     public Mono<Map<String, Long>> getTicketTypeDistribution() {
-        return userRoleUtil.isAdmin()
-                .flatMap(adminCheckResponse -> {
-                    if (adminCheckResponse.getIsAdmin()) {
-                        return ticketRepository.countGroupedByType()
-                                .collectMap(
-                                        LabelCountProjection::getLabel,
-                                        LabelCountProjection::getCount
-                                );
+        return ticketTypeRepository.findAll()
+                .collectMap(TicketType::getId, TicketType::getKey)
+                .flatMap(typeMap ->
+                        userRoleUtil.isAdmin()
+                                .flatMap(adminCheckResponse -> {
+                                    Flux<Ticket> flux = adminCheckResponse.getIsAdmin()
+                                            ? ticketRepository.findAll()
+                                            : ticketRepository.findByAssignedTo(adminCheckResponse.getUserId());
 
-                    }
-
-                    return ticketRepository.countByUserGroupedByType(adminCheckResponse.getUserId())
-                            .collectMap(
-                                    LabelCountProjection::getLabel,
-                                    LabelCountProjection::getCount
-                            );
-                });
+                                    return flux.collectList()
+                                            .map(tickets -> {
+                                                Map<String, Long> result = new HashMap<>();
+                                                tickets.forEach(t -> {
+                                                    String key = typeMap.getOrDefault(t.getType(), "UNKNOWN");
+                                                    result.put(key, result.getOrDefault(key, 0L) + 1);
+                                                });
+                                                return result;
+                                            });
+                                })
+                );
     }
 
     @Override
     public Mono<Map<String, Long>> getTicketPriorityDistribution() {
         return userRoleUtil.isAdmin()
                 .flatMap(adminCheckResponse -> {
-                    if (adminCheckResponse.getIsAdmin()) {
-                        return ticketRepository.countGroupedByPriority()
-                                .collectMap(
-                                        LabelCountProjection::getLabel,
-                                        LabelCountProjection::getCount
-                                );
+                    Flux<Ticket> flux = adminCheckResponse.getIsAdmin()
+                            ? ticketRepository.findAll()
+                            : ticketRepository.findByAssignedTo(adminCheckResponse.getUserId());
 
-                    }
-
-                    return ticketRepository.countByUserGroupedByPriority(adminCheckResponse.getUserId())
-                            .collectMap(
-                                    LabelCountProjection::getLabel,
-                                    LabelCountProjection::getCount
-                            );
+                    return flux.collectList()
+                            .map(tickets -> {
+                                Map<String, Long> result = new HashMap<>();
+                                tickets.forEach(t -> {
+                                    String key = Optional.of(t.getPriority().toString()).orElse("UNKNOWN");
+                                    result.put(key, result.getOrDefault(key, 0L) + 1);
+                                });
+                                return result;
+                            });
                 });
     }
 

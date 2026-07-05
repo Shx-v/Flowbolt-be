@@ -3,9 +3,9 @@ spring:
     name: "auth-template"
 
   r2dbc:
-    url: ${SPRING_R2DBC_URL:r2dbc:postgresql://shiv:fHebXigE5RVWEVE6p5mHS3UgqoODuz7j@dpg-d6602nbnv86c73e0uppg-a.singapore-postgres.render.com/fbmono?sslmode=require}
+    url: ${SPRING_R2DBC_URL:r2dbc:postgresql://shiv:8vhdiAUbkE6ghJm692gzJj5dDzmx6c7X@dpg-d94ti6q8qa3s73d7v3v0-a.singapore-postgres.render.com/flowbolt?sslmode=require}
     username: ${SPRING_R2DBC_USERNAME:shiv}
-    password: ${SPRING_R2DBC_PASSWORD:fHebXigE5RVWEVE6p5mHS3UgqoODuz7j}
+    password: ${SPRING_R2DBC_PASSWORD:8vhdiAUbkE6ghJm692gzJj5dDzmx6c7X}
     pool:
       enabled: true
       initial-size: 10
